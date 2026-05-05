@@ -138,7 +138,11 @@ class TestKeyfilter:
 
     def test_string_values(self) -> None:
         """keyfilter with string values (README example)."""
-        result = dt.keyfilter(lambda k: k % 2 == 0, {1: "a", 2: "b", 3: "c"})
+
+        def iseven(x: int) -> bool:
+            return x % 2 == 0
+
+        result = dt.keyfilter(iseven, {1: "a", 2: "b", 3: "c"})
 
         _ = assert_type(result, dict[int, str])
         assert result == {2: "b"}
@@ -372,29 +376,29 @@ class TestGetIn:
     #     _ = assert_type(result, str | dict[str, list[str] | list[float]] | None)
     #     assert result == "Apple"
 
-    # def test_single_key(self) -> None:
-    #     """get_in with single key."""
-    #     transaction = {
-    #         "name": "Alice",
-    #         "purchase": {"items": ["Apple", "Orange"], "costs": [0.50, 1.25]},
-    #         "credit card": "5555-1234-1234-1234",
-    #     }
-    #     result = dt.get_in(["name"], transaction)
+    def test_single_key(self) -> None:
+        """get_in with single key."""
+        transaction = {
+            "name": "Alice",
+            "purchase": {"items": ["Apple", "Orange"], "costs": [0.50, 1.25]},
+            "credit card": "5555-1234-1234-1234",
+        }
+        result = dt.get_in(["name"], transaction)
 
-    #     _ = assert_type(result, str | dict[str, list[str] | list[float]] | None)
-    #     assert result == "Alice"
+        _ = assert_type(result, str | dict[str, list[str] | list[float]] | None)
+        assert result == "Alice"
 
-    # def test_missing_returns_none(self) -> None:
-    #     """get_in returns None for missing key by default."""
-    #     transaction = {
-    #         "name": "Alice",
-    #         "purchase": {"items": ["Apple", "Orange"], "costs": [0.50, 1.25]},
-    #         "credit card": "5555-1234-1234-1234",
-    #     }
-    #     result = dt.get_in(["purchase", "total"], transaction)
+    def test_missing_returns_none(self) -> None:
+        """get_in returns None for missing key by default."""
+        transaction = {
+            "name": "Alice",
+            "purchase": {"items": ["Apple", "Orange"], "costs": [0.50, 1.25]},
+            "credit card": "5555-1234-1234-1234",
+        }
+        result = dt.get_in(["purchase", "total"], transaction)
 
-    #     _ = assert_type(result, str | dict[str, list[str] | list[float]] | None)
-    #     assert result is None
+        _ = assert_type(result, str | dict[str, list[str] | list[float]] | None)
+        assert result is None
 
     # def test_missing_index_returns_none(self) -> None:
     #     """get_in returns None for missing index."""
@@ -408,20 +412,22 @@ class TestGetIn:
     #     _ = assert_type(result, str | dict[str, list[str] | list[float]] | None)
     #     assert result is None
 
-    # def test_with_default(self) -> None:
-    #     """get_in with explicit default value."""
-    #     transaction = {
-    #         "name": "Alice",
-    #         "purchase": {"items": ["Apple", "Orange"], "costs": [0.50, 1.25]},
-    #         "credit card": "5555-1234-1234-1234",
-    #     }
-    #     result = dt.get_in(["purchase", "total"], transaction, 0)
+    def test_with_default(self) -> None:
+        """get_in with explicit default value."""
+        transaction = {
+            "name": "Alice",
+            "purchase": {"items": ["Apple", "Orange"], "costs": [0.50, 1.25]},
+            "credit card": "5555-1234-1234-1234",
+        }
+        result = dt.get_in(["purchase", "total"], transaction, 0)
 
-    #     _ = assert_type(result, str | dict[str, list[str] | list[float]] | int)
-    #     assert result == 0
+        _ = assert_type(result, str | dict[str, list[str] | list[float]] | int)
+        assert result == 0
 
     def test_no_default_raises(self) -> None:
         """get_in with no_default=True should raise KeyError."""
 
+        coll: dict[str, int] = {}
+
         with pytest.raises(KeyError):
-            _ = dt.get_in(["y"], {}, no_default=True)
+            _ = dt.get_in(["y"], coll, no_default=True)

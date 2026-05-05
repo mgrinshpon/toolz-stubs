@@ -86,7 +86,10 @@ def test_valfilter() -> None:
     """valfilter should filter by value."""
     d = {"a": 1, "b": 2, "c": 3, "d": 4}
 
-    result = tlz.valfilter(lambda x: x > 2, d)
+    def value_greater_than_2(x: int) -> bool:
+        return x > 2
+
+    result = tlz.valfilter(value_greater_than_2, d)
 
     _ = assert_type(result, dict[str, int])
     assert result == {"c": 3, "d": 4}
