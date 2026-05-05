@@ -46,8 +46,8 @@ __all__ = (
 )
 
 ### Special types for toolz
-type _NoDefaultType = typing.Literal["__no_default__"]
-type _NoPadType = typing.Literal["__no_pad__"]
+type _NoDefaultType = typing.Literal["__no__default__"]
+type _NoPadType = typing.Literal["__no__pad__"]
 
 class _Randomable(typing.Protocol):
     def random(self) -> float: ...
@@ -574,7 +574,7 @@ def sliding_window[T](
     """
     ...
 
-no_pad = "__no_pad__"
+no_pad = "__no__pad__"
 
 @typing.overload
 def partition[T, P](

@@ -12,7 +12,7 @@ type _MapFunction[T] = collections.abc.Callable[
 def fold[T](
     binop: collections.abc.Callable[[T, T], T],
     seq: collections.abc.Iterable[T],
-    default: typing.Literal["__no__default__"] | T = "__no_default__",
+    default: typing.Literal["__no__default__"] | T = "__no__default__",
     map: _MapFunction[T] = map,
     chunksize: int = 128,
     combine: collections.abc.Callable[[T, T], T] | None = None,
